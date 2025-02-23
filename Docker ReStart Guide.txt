@@ -1,0 +1,18 @@
+도커를 다시 올리면,
+
+1. vi /etc/hosts 에서 아래 내용 추가 
+172.17.0.2 master1
+172.17.0.3 worker1
+172.17.0.4 worker2
+
+2. service ssh start
+
+3. HDFS 클러스터를 초기화 할거면
+hdfs namenode -format
+
+4. 하둡 클러스터 서비스 실행
+start-all.sh
+
+
+ex)
+docker load -i worker2_image.tar 를 통해서 이미지 불러올수도 있음.

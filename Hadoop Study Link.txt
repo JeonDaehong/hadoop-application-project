@@ -1,0 +1,33 @@
+병렬 컴퓨팅 이론
+https://devsci.tistory.com/4
+
+분산 컴퓨팅
+https://chatgpt.com/c/67b53e3a-fa1c-800e-ab4b-b302ea35e685
+https://aws.amazon.com/ko/what-is/distributed-computing/
+https://etloveguitar.tistory.com/159
+https://onduway.tistory.com/106
+https://jinseong-dev.tistory.com/40
+https://sjh9708.tistory.com/154
+https://technet.tmax.co.kr/upload/download/online/tibero/pver-20240502-000002/tibero_admin/chapter_07.html#d5e9480
+https://velog.io/@jochedda/%EB%B6%84%EC%82%B0-%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B3%BC-%ED%95%A9%EC%9D%98-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98
+
+하둡 클러스터 구축
+https://velog.io/@donadona/DevOps-Docker%EB%A1%9C-%ED%95%98%EB%91%A1-%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0-%EA%B5%AC%EC%84%B1
+
+
+하둡 기본 개념
+https://wikidocs.net/22653
+https://dibrary.tistory.com/190
+https://www.databricks.com/kr/glossary/hadoop
+https://www.gooper.com/ss/bigdata/3114?listStyle=webzine&page=16&sort_index=regdate&order_type=asc
+https://github.com/mjs1995/Book_review/blob/main/%ED%95%98%EB%91%A1%20%EC%99%84%EB%B2%BD%20%EA%B0%80%EC%9D%B4%EB%93%9C.md
+https://velog.io/@jkjan/Hadoop-%EA%B8%B0%EC%B4%88
+https://velog.io/@jkjan/%ED%95%98%EB%91%A1-%EB%8B%B9%EC%8B%A0%EC%9D%B4-%EC%95%8C%EC%95%84%EC%95%BC-%ED%95%A0-%EA%B2%83
+https://velog.io/@jkjan/%ED%95%98%EB%91%A1-%ED%95%98%EB%91%A1-%EB%B6%84%EC%82%B0-%ED%8C%8C%EC%9D%BC%EC%8B%9C%EC%8A%A4%ED%85%9C
+https://velog.io/@jkjan/Hadoop-%EB%A7%B5-%EB%A6%AC%EB%93%80%EC%8A%A4-%EC%8B%A4%ED%96%89%ED%95%B4%EB%B3%B4%EA%B8%B0
+
+하둡 설정 파일
+https://chatgpt.com/c/67b53109-cd68-800e-83b6-19054afe0cdd
+
+하둡 장애 대응
+https://joohs0505.tistory.com/231
