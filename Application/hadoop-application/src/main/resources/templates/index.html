@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HDFS 웹</title>
+</head>
+<body>
+<h1 th:text="${message}"></h1>
+
+<form action="#" th:action="@{/upload}" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" required/>
+    <button type="submit">파일 업로드</button>
+</form>
+
+<h2>파일 다운로드</h2>
+<ul>
+    <li th:each="file : ${fileList}">
+        <a th:href="@{/download(filename=${file})}" th:text="${file}"></a>
+    </li>
+</ul>
+</body>
+</html>
