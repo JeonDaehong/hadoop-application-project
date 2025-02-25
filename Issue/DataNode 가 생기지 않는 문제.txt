@@ -16,6 +16,8 @@ NameNode의 ClusterID와 DataNode의 ClusterID가 일치하지 않아서 DataNod
 
 <해결>
 하둡 서비스를 전체 종료 : stop-all.sh
+Yarn 종료 : stop-yarn.sh
 데이터노드에 저장된 블록 정보 상제 : rm -rf /usr/local/hadoop/hadoop_tmp/hdfs/datanode/*
+	- Master Worker 다 지워주어야 함.
 네임 노드 포맷 : hdfs namenode -format ( 선택 사항 )
 하둡 클러스터 재시작 : start-all.sh
