@@ -1,7 +1,7 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.hadoop.fs.FileStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.springframework.core.io.InputStreamResource;
@@ -17,11 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class HDFSController {
 
     private final FileSystem fileSystem;
