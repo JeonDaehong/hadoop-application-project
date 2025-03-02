@@ -1,0 +1,53 @@
+services:
+  namenode:
+    image: hadoop-cluster
+    container_name: namenode
+    hostname: namenode
+    ports:
+      - "9870:9870"  # HDFS Web UI
+      - "9000:9000"  # HDFS
+    volumes:
+      - ./data/namenode:/opt/hadoop/data/namenode
+    networks:
+      - hadoop-network
+
+  resourcemanager:
+    image: hadoop-cluster
+    container_name: resourcemanager
+    hostname: resourcemanager
+    ports:
+      - "8088:8088"  # YARN Web UI
+    depends_on:
+      - namenode
+    networks:
+      - hadoop-network
+
+  datanode1:
+    image: hadoop-cluster
+    container_name: datanode1
+    hostname: datanode1
+    ports:
+      - "9864:9864"  # DataNode Web UI
+    volumes:
+      - ./data/datanode1:/opt/hadoop/data/datanode
+    depends_on:
+      - namenode
+    networks:
+      - hadoop-network
+
+  datanode2:
+    image: hadoop-cluster
+    container_name: datanode2
+    hostname: datanode2
+    ports:
+      - "9865:9864"  # DataNode Web UI (다른 포트로 매핑)
+    volumes:
+      - ./data/datanode2:/opt/hadoop/data/datanode
+    depends_on:
+      - namenode
+    networks:
+      - hadoop-network
+
+networks:
+  hadoop-network:
+    external: true

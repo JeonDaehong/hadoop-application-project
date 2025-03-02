@@ -1,21 +1,139 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>HDFS 웹</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .message {
+            background-color: #f39c12;
+            color: white;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 1.2em;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .form-container input[type="file"] {
+            display: block;
+            margin: 15px 0;
+            padding: 10px;
+            width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-container button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container button:hover {
+            background-color: #2980b9;
+        }
+
+        .file-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .file-list li {
+            margin: 10px 0;
+        }
+
+        .file-list a {
+            text-decoration: none;
+            color: #3498db;
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+        }
+
+        .file-list a:hover {
+            color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-<h1 th:text="${message}"></h1>
 
-<form action="#" th:action="@{/upload}" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" required/>
-    <button type="submit">파일 업로드</button>
-</form>
+<header>
+    <h1>HDFS 웹 애플리케이션</h1>
+</header>
 
-<h2>파일 다운로드</h2>
-<ul>
-    <li th:each="file : ${fileList}">
-        <a th:href="@{/download(filename=${file})}" th:text="${file}"></a>
-    </li>
-</ul>
+<div class="container">
+
+    <!-- 메시지 박스 -->
+    <div class="message" th:text="${message}"></div>
+
+    <div class="form-container">
+        <form action="#" th:action="@{/upload}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" required/>
+            <button type="submit">파일 업로드</button>
+        </form>
+    </div>
+
+    <h2>파일 다운로드</h2>
+
+    <ul class="file-list">
+        <li th:each="file : ${fileList}">
+            <a th:href="@{/download(filename=${file})}" th:text="${file}"></a>
+        </li>
+    </ul>
+
+</div>
+
+<script>
+    // 파일 업로드 진행 중 로딩 바를 보여주기 위한 JavaScript 예시
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const button = e.target.querySelector('button');
+        button.innerHTML = '업로드 중...';
+        button.disabled = true;
+    });
+</script>
+
 </body>
 </html>

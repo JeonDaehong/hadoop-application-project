@@ -1,0 +1,6 @@
+네임노드 컨테이너에 들어가서
+
+./data/namenode/
+
+해당 위치에 touch ./data/namenode/format_complete 로 파일을 만들면,
+도커를 내렸다 올렸을 때 컨테이너를 자동 초기화 해 줌.
