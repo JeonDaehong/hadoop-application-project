@@ -53,13 +53,15 @@
             margin-top: 30px;
         }
 
-        .form-container input[type="file"] {
+        .form-container input[type="file"],
+        .form-container input[type="text"] {
             display: block;
             margin: 15px 0;
             padding: 10px;
             width: 100%;
             border: 2px solid #ddd;
             border-radius: 4px;
+            font-size: 1em;
         }
 
         .form-container button {
@@ -110,8 +112,9 @@
     <div class="message" th:text="${message}"></div>
 
     <div class="form-container">
-        <form action="#" th:action="@{/upload}" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" required/>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" name="file" required />
+            <label for="pathInput"></label><input type="text" id="pathInput" name="path" placeholder="HDFS 경로 입력" required />
             <button type="submit">파일 업로드</button>
         </form>
     </div>
@@ -120,7 +123,7 @@
 
     <ul class="file-list">
         <li th:each="file : ${fileList}">
-            <a th:href="@{/download(filename=${file})}" th:text="${file}"></a>
+            <a th:href="@{/api/hdfs/download(fileName=${file})}" th:text="${file}"></a>
         </li>
     </ul>
 
@@ -132,6 +135,40 @@
         const button = e.target.querySelector('button');
         button.innerHTML = '업로드 중...';
         button.disabled = true;
+    });
+
+    // 폼 제출 이벤트 처리
+    document.getElementById("uploadForm").addEventListener("submit", function (e) {
+        e.preventDefault();  // 기본 폼 제출 동작 방지
+
+        let formData = new FormData();  // 폼 데이터 객체
+        let fileInput = document.getElementById("fileInput");
+        let pathInput = document.getElementById("pathInput"); // 경로 입력 필드
+        formData.append("file", fileInput.files[0]);  // 파일을 폼 데이터에 추가
+        formData.append("path", pathInput.value);  // 경로를 폼 데이터에 추가
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/hdfs/upload", true);  // 서버의 업로드 엔드포인트로 POST 요청
+        xhr.setRequestHeader("Accept", "application/json");  // 응답 형식을 JSON으로 설정
+
+        // 요청이 완료되었을 때 처리
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                // 서버로부터 응답받은 데이터
+                let response = JSON.parse(xhr.responseText);
+
+                // 업로드 메시지와 파일 목록을 처리
+                alert(response.message);  // 업로드 메시지 알림
+                console.log("업로드된 파일 목록:", response.fileList);  // 파일 목록 출력
+
+                window.location.reload();  // 페이지 새로고침
+            } else {
+                alert("파일 업로드 실패!");
+            }
+        };
+
+        // 서버 요청 전송
+        xhr.send(formData);
     });
 </script>
 

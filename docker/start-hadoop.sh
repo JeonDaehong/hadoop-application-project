@@ -16,10 +16,6 @@ cat > ${HADOOP_HOME}/etc/hadoop/core-site.xml << XML
         <name>fs.defaultFS</name>
         <value>hdfs://namenode:9000</value>
     </property>
-	<property>
-		<name>dfs.webhdfs.enabled</name>
-		<value>true</value>
-	</property>
 </configuration>
 XML
 
@@ -90,12 +86,22 @@ mkdir -p ${HADOOP_HOME}/data/namenode ${HADOOP_HOME}/data/datanode
 
 # 컨테이너 역할에 따라 다른 작업 수행
 if [ "$(hostname)" == "namenode" ]; then
-    echo "Formatting namenode..."
-    ${HADOOP_HOME}/bin/hdfs namenode -format
+    # 포맷 여부를 확인하는 플래그 파일 경로
+    FORMAT_FLAG="${HADOOP_HOME}/data/namenode/format_complete"
+    
+    # 플래그 파일이 없으면 처음 실행으로 판단하고 포맷 수행
+    if [ ! -f "$FORMAT_FLAG" ]; then
+        echo "First time running, formatting namenode..."
+        echo "Y" | ${HADOOP_HOME}/bin/hdfs namenode -format
+        # 포맷 완료 플래그 생성
+        touch "$FORMAT_FLAG"
+    else
+        echo "NameNode already formatted, skipping format..."
+    fi
     
     echo "Starting namenode..."
     ${HADOOP_HOME}/sbin/hadoop-daemon.sh start namenode
-    
+
     # 무한 대기
     tail -f /dev/null
 elif [ "$(hostname)" == "resourcemanager" ]; then

@@ -28,6 +28,7 @@ services:
     hostname: datanode1
     ports:
       - "9864:9864"  # DataNode Web UI
+      - "9866:9866"
     volumes:
       - ./data/datanode1:/opt/hadoop/data/datanode
     depends_on:
@@ -41,6 +42,7 @@ services:
     hostname: datanode2
     ports:
       - "9865:9864"  # DataNode Web UI (다른 포트로 매핑)
+      - "9867:9866"
     volumes:
       - ./data/datanode2:/opt/hadoop/data/datanode
     depends_on:

@@ -1,27 +1,25 @@
-package org.example.hadoopapplication.domain.hdfs.service;
+package org.example.hadoop_app.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
-public class HDFSService {
+public class HdfsService {
 
     private final Configuration hadoopConfiguration;
+
+    @Autowired
+    public HdfsService(Configuration hadoopConfiguration) {
+        this.hadoopConfiguration = hadoopConfiguration;
+    }
 
     public void downloadFile(String hdfsPath, OutputStream outputStream) throws IOException {
         FileSystem fileSystem = null;
@@ -37,7 +35,7 @@ public class HDFSService {
                 throw new IOException("File not found at path: " + hdfsPath);
             }
 
-            // HDFS 에서 파일 읽기
+            // HDFS에서 파일 읽기
             inputStream = fileSystem.open(path);
 
             // 파일 내용을 출력 스트림으로 복사
@@ -56,7 +54,9 @@ public class HDFSService {
 
     // HDFS에 파일 업로드 메서드 (참고용)
     public void uploadFile(java.io.InputStream inputStream, String hdfsPath) throws IOException {
-        try (FileSystem fileSystem = FileSystem.get(hadoopConfiguration)) {
+        FileSystem fileSystem = null;
+        try {
+            fileSystem = FileSystem.get(hadoopConfiguration);
             Path path = new Path(hdfsPath);
 
             // 부모 디렉터리가 없을 경우 생성
@@ -74,22 +74,10 @@ public class HDFSService {
             try (org.apache.hadoop.fs.FSDataOutputStream outputStream = fileSystem.create(path)) {
                 IOUtils.copyBytes(inputStream, outputStream, hadoopConfiguration, true);
             }
-        }
-    }
-
-    // HDFS 파일 목록 가져오는 메서드
-    public String[] getHDFSFileList() {
-        FileSystem fileSystem = null;
-        try {
-            fileSystem = FileSystem.get(hadoopConfiguration);
-            FileStatus[] fileStatuses = fileSystem.listStatus(new Path("/user/test"));
-            return Arrays.stream(fileStatuses)
-                    .map(FileStatus::getPath)
-                    .map(Path::getName)
-                    .toArray(String[]::new);
-        } catch (IOException e) {
-            log.error("ERROR >>> {}", e.getMessage());
-            return new String[0];
+        } finally {
+            if (fileSystem != null) {
+                fileSystem.close();
+            }
         }
     }
 }
