@@ -36,6 +36,41 @@ cat > ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml << XML
         <name>dfs.datanode.data.dir</name>
         <value>/opt/hadoop/data/datanode</value>
     </property>
+    <!-- 클라이언트가 호스트 이름 대신 IP 주소 사용 설정 -->
+    <property>
+        <name>dfs.client.use.datanode.hostname</name>
+        <value>true</value>
+    </property>
+    <!-- 데이터노드가 호스트 이름 대신 IP 주소 사용 설정 -->
+    <property>
+        <name>dfs.datanode.use.datanode.hostname</name>
+        <value>true</value>
+    </property>
+    <!-- WebHDFS 활성화 -->
+    <property>
+        <name>dfs.webhdfs.enabled</name>
+        <value>true</value>
+    </property>
+    <!-- 호스트 이름 체크 비활성화 -->
+    <property>
+        <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+        <value>false</value>
+    </property>
+    <!-- 데이터노드가 클라이언트에게 제공하는 데이터 전송 주소 -->
+    <property>
+        <name>dfs.datanode.address</name>
+        <value>0.0.0.0:9866</value>
+    </property>
+    <!-- datanode2의 특수 설정 -->
+    <property>
+        <name>dfs.datanode.address.datanode2</name>
+        <value>localhost:9867</value>
+    </property>
+    <!-- 클라이언트가 데이터노드에 연결할 때 사용할 외부 IP 지정 -->
+    <property>
+        <name>dfs.client.datanode.address.resolution.enabled</name>
+        <value>true</value>
+    </property>
 </configuration>
 XML
 
