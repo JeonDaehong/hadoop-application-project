@@ -36,40 +36,85 @@ cat > ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml << XML
         <name>dfs.datanode.data.dir</name>
         <value>/opt/hadoop/data/datanode</value>
     </property>
-    <!-- 클라이언트가 호스트 이름 대신 IP 주소 사용 설정 -->
-    <property>
-        <name>dfs.client.use.datanode.hostname</name>
-        <value>true</value>
-    </property>
-    <!-- 데이터노드가 호스트 이름 대신 IP 주소 사용 설정 -->
-    <property>
-        <name>dfs.datanode.use.datanode.hostname</name>
-        <value>true</value>
-    </property>
     <!-- WebHDFS 활성화 -->
     <property>
         <name>dfs.webhdfs.enabled</name>
         <value>true</value>
     </property>
-    <!-- 호스트 이름 체크 비활성화 -->
+    <!-- 클라이언트가 호스트이름 사용 설정 -->
     <property>
-        <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+        <name>dfs.client.use.datanode.hostname</name>
         <value>false</value>
     </property>
-    <!-- 데이터노드가 클라이언트에게 제공하는 데이터 전송 주소 -->
+    <!-- 데이터노드 호스트이름 사용 설정 -->
+    <property>
+        <name>dfs.datanode.use.datanode.hostname</name>
+        <value>false</value>
+    </property>
+    <!-- 데이터노드 주소 바인딩 설정 -->
     <property>
         <name>dfs.datanode.address</name>
         <value>0.0.0.0:9866</value>
     </property>
-    <!-- datanode2의 특수 설정 -->
+    <!-- 데이터노드 HTTP 주소 -->
     <property>
-        <name>dfs.datanode.address.datanode2</name>
-        <value>localhost:9867</value>
+        <name>dfs.datanode.http.address</name>
+        <value>0.0.0.0:9864</value>
     </property>
-    <!-- 클라이언트가 데이터노드에 연결할 때 사용할 외부 IP 지정 -->
+    <!-- 데이터노드 IPC 주소 -->
     <property>
-        <name>dfs.client.datanode.address.resolution.enabled</name>
-        <value>true</value>
+        <name>dfs.datanode.ipc.address</name>
+        <value>0.0.0.0:9867</value>
+    </property>
+    <!-- 호스트 이름 검사 비활성화 -->
+    <property>
+        <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+        <value>false</value>
+    </property>
+    <!-- 데이터노드 헬스 체크 간격 증가 -->
+    <property>
+        <name>dfs.namenode.heartbeat.recheck-interval</name>
+        <value>300000</value>
+    </property>
+    <!-- 블록 보고서 간격 증가 -->
+    <property>
+        <name>dfs.blockreport.intervalMsec</name>
+        <value>21600000</value>
+    </property>
+    <!-- 클라이언트 실패 후 재시도 간격 증가 -->
+    <property>
+        <name>dfs.client.failover.sleep.base.millis</name>
+        <value>1000</value>
+    </property>
+    <!-- 데이터노드 호스트 이름 지정 (각 노드마다 수정 필요) -->
+    <property>
+        <name>dfs.datanode.hostname</name>
+        <value>localhost</value>
+    </property>
+    <property>
+        <name>dfs.namenode.safemode.extension</name>
+        <value>0</value>
+    </property>
+    
+    <!-- IP 주소 대신 호스트 주소 사용 방지 -->
+    <property>
+        <name>dfs.client.use.datanode.hostname</name>
+        <value>false</value>
+    </property>
+    <!-- 블록 위치 정보에 호스트 주소 대신 IP 사용 -->
+    <property>
+        <name>dfs.datanode.use.datanode.hostname</name>
+        <value>false</value>
+    </property>
+    <!-- 데이터노드 실패 처리 정책 -->
+    <property>
+        <name>dfs.client.block.write.replace-datanode-on-failure.policy</name>
+        <value>NEVER</value>
+    </property>
+    <!-- 데이터노드 실패 시 교체 비활성화 -->
+    <property>
+        <name>dfs.client.block.write.replace-datanode-on-failure.enable</name>
+        <value>false</value>
     </property>
 </configuration>
 XML
@@ -146,8 +191,21 @@ elif [ "$(hostname)" == "resourcemanager" ]; then
     # 무한 대기
     tail -f /dev/null
 else
-    echo "Starting DataNode..."
-    ${HADOOP_HOME}/sbin/hadoop-daemon.sh start datanode
+	if [ "$(hostname)" == "datanode1" ] || [ "$(hostname)" == "datanode2" ]; then
+		# 데이터노드 호스트명 설정 수정
+		CURRENT_HOSTNAME=$(hostname)
+		echo "Setting datanode hostname to: $CURRENT_HOSTNAME"
+		sed -i "s/<value>localhost<\/value>/<value>$CURRENT_HOSTNAME<\/value>/" ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml
+
+		# 클러스터 ID 파일만 삭제 (데이터는 보존)
+		if [ -f "${HADOOP_HOME}/data/datanode/current/VERSION" ]; then
+			echo "Removing cluster ID information..."
+			rm -f ${HADOOP_HOME}/data/datanode/current/VERSION
+		fi
+		
+		echo "Starting DataNode..."
+		${HADOOP_HOME}/sbin/hadoop-daemon.sh start datanode
+	fi
     
     echo "Starting NodeManager..."
     ${HADOOP_HOME}/sbin/yarn-daemon.sh start nodemanager
