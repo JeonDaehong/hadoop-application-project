@@ -13,6 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/hdfs")
@@ -45,14 +48,17 @@ public class HDFSController {
     }
 
 
-    // 파일 업로드 엔드포인트 (참고용)
+    // 파일 업로드 엔드포인트
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,
-                                             @RequestParam("path") String hdfsPath) throws IOException {
+    public ResponseEntity<Map<String, Object>> uploadFile(@RequestParam("file") MultipartFile file,
+                                                          @RequestParam("path") String hdfsPath) throws IOException {
         try (InputStream inputStream = file.getInputStream()) {
             hdfsService.uploadFile(inputStream, hdfsPath);
-            return ResponseEntity.ok("File uploaded successfully to: " + hdfsPath);
+            // JSON 응답을 생성
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "File uploaded successfully to: " + hdfsPath);
+
+            return ResponseEntity.ok(response);
         }
     }
-
 }
