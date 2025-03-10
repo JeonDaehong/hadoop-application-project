@@ -18,7 +18,6 @@ public class HomeController {
     public String home(Model model) {
         model.addAttribute("message", "안녕, HDFS!");
         model.addAttribute("fileList", hdfsService.getHDFSFileList());
-        model.addAttribute("dataNodes", hdfsService.getDataNodesInfo());
         return "index";
     }
 

@@ -127,45 +127,6 @@
         </li>
     </ul>
 
-    <br>
-
-    <h2>데이터 노드 정보</h2>
-
-    <table>
-        <thead>
-        <tr>
-            <th>호스트명</th>
-            <th>IP 주소</th>
-            <th>용량 (GB)</th>
-            <th>사용된 공간 (GB)</th>
-            <th>남은 공간 (GB)</th>
-            <th>블록 정보</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="node, stat : ${dataNodes}">
-            <td th:text="${node.hostName}"></td>
-            <td th:text="${node.ipAddr}"></td>
-            <td th:text="${#numbers.formatDecimal(node.capacity / 1073741824.0, 1, 2)} + ' GB'"></td>
-            <td th:text="${#numbers.formatDecimal(node.usedSpace / 1073741824.0, 1, 2)} + ' GB'"></td>
-            <td th:text="${#numbers.formatDecimal(node.remainingSpace / 1073741824.0, 1, 2)} + ' GB'"></td>
-            <td>
-                <button class="toggle-button" th:attr="data-target='block-' + ${stat.index}">블록 보기</button>
-                <div class="block-info" th:id="'block-' + ${stat.index}">
-                    <p th:if="${node.blocks.isEmpty()}">블록 없음</p>
-                    <ul>
-                        <li th:each="block : ${node.blocks}">
-                            블록 ID: <span th:text="${block.blockId}"></span>, 크기:
-                            <span th:text="${#numbers.formatDecimal(block.blockSize / 1048576.0, 1, 2)} + ' MB'"></span>,
-                            복제: <span th:text="${block.isReplication}"></span>
-                        </li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
 </div>
 
 <script>
@@ -229,20 +190,6 @@
         });
     });
 
-    // 블록 정보 토글 기능
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".toggle-button").forEach(button => {
-            button.addEventListener("click", function () {
-                let targetId = this.getAttribute("data-target");
-                let targetElement = document.getElementById(targetId);
-                if (targetElement.style.display === "none" || targetElement.style.display === "") {
-                    targetElement.style.display = "block";
-                } else {
-                    targetElement.style.display = "none";
-                }
-            });
-        });
-    });
 </script>
 
 </body>
