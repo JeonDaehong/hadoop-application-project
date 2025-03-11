@@ -14,7 +14,6 @@ https://velog.io/@jochedda/%EB%B6%84%EC%82%B0-%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B3%
 하둡 클러스터 구축
 https://velog.io/@donadona/DevOps-Docker%EB%A1%9C-%ED%95%98%EB%91%A1-%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0-%EA%B5%AC%EC%84%B1
 
-
 하둡 기본 개념
 https://wikidocs.net/22653
 https://dibrary.tistory.com/190
