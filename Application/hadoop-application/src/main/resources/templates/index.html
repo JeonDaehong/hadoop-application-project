@@ -127,6 +127,12 @@
         </li>
     </ul>
 
+    <h2>Iceberg 작업</h2>
+
+    <button id="createTableButton">Create Iceberg Table</button>
+
+    <button id="addDummyDataButton">Add Dummy Data to Iceberg</button>
+
 </div>
 
 <script>
@@ -188,6 +194,30 @@
                 event.preventDefault();  // 고정된 부분 삭제 방지
             }
         });
+    });
+
+    document.getElementById('createTableButton').addEventListener('click', function() {
+        fetch('/api/iceberg/create/table')
+            .then(response => {
+                if (response.ok) {
+                    alert('Iceberg Table created or already exists.');
+                } else {
+                    alert('Failed to create Iceberg Table.');
+                }
+            })
+            .catch(error => alert('Error: ' + error));
+    });
+
+    document.getElementById('addDummyDataButton').addEventListener('click', function() {
+        fetch('/api/iceberg/put/data')
+            .then(response => {
+                if (response.ok) {
+                    alert('Dummy data added to Iceberg Table.');
+                } else {
+                    alert('Failed to add dummy data.');
+                }
+            })
+            .catch(error => alert('Error: ' + error));
     });
 
 </script>

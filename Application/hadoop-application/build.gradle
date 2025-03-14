@@ -25,6 +25,9 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://repo.maven.apache.org/maven2' }  // Maven Central Repository URL
+	maven { url 'https://repository.apache.org/content/repositories/releases/' }  // Iceberg 공식 저장소
+
 }
 
 dependencies {
@@ -33,6 +36,9 @@ dependencies {
 	implementation 'org.apache.hadoop:hadoop-client:3.1.1'
 	implementation 'org.apache.hadoop:hadoop-hdfs:3.1.1'
 	implementation 'org.apache.hadoop:hadoop-common:3.1.1'
+	implementation 'org.apache.iceberg:iceberg-api:0.14.0'
+	implementation 'org.apache.iceberg:iceberg-core:0.14.0'
+	implementation 'org.apache.spark:spark-sql_2.12:3.1.1'  // Apache Spark 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 	implementation 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
